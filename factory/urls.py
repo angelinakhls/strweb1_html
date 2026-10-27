@@ -19,6 +19,7 @@ urlpatterns = [
     re_path(r'^orders/(?P<pk>\d+)/$', views.order_detail, name='order_detail'),
     re_path(r'^orders/(?P<pk>\d+)/edit/$', views.order_edit, name='order_edit'),
     re_path(r'^orders/(?P<pk>\d+)/delete/$', views.order_delete, name='order_delete'),
+    path('checkout/', views.checkout, name='checkout'),
     re_path(r'^privacy/$', views.privacy, name='privacy'),
     path('clients/', views.client_list, name='clients'),
     path('glossary/', views.glossary, name='glossary'),

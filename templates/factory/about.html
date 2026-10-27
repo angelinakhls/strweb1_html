@@ -1,13 +1,90 @@
 {% extends 'factory/base.html' %}
 {% block title %}О компании{% endblock %}
 {% block content %}
-<h1>О компании</h1>
-{% for item in info %}
-<div style="margin:15px 0;">
-    {% if item.year %}<h3>{{ item.year }}</h3>{% endif %}
-    <h2>{{ item.title }}</h2>
-    <p>{{ item.content }}</p>
-</div>
-{% empty %}<p>Информация не добавлена.</p>
-{% endfor %}
+<section class="content-block page-intro">
+    <p class="eyebrow">О компании</p>
+    <h1>Надёжный партнёр в цифровом развитии</h1>
+</section>
+
+{% if company %}
+    <section class="company-summary">
+        <div class="company-logo-box">
+            {% if company.logo %}
+                <img src="{{ company.logo.url }}" alt="Логотип компании" loading="lazy">
+            {% else %}
+                <div class="company-logo-fallback">Digital Pro</div>
+            {% endif %}
+        </div>
+        <div class="company-summary-copy">
+            <h2>{{ company.title }}</h2>
+            <p>{{ company.content }}</p>
+        </div>
+    </section>
+{% endif %}
+
+<section class="content-block">
+    <div class="section-heading">
+        <p class="eyebrow">Видео</p>
+        <h2>Обзор компании</h2>
+    </div>
+    <div class="media-frame">
+        <iframe src="https://www.youtube.com/embed/ScMzIvxBSi4?si=I1ldk2m1o2P-DJwJ" title="Видео о компании" loading="lazy" allowfullscreen></iframe>
+    </div>
+</section>
+
+<section class="content-block">
+    <div class="section-heading">
+        <p class="eyebrow">История</p>
+        <h2>Основные этапы развития</h2>
+    </div>
+    <div class="timeline">
+        {% for item in info %}
+            <article class="timeline-item">
+                {% if item.year %}<span class="year-badge">{{ item.year }}</span>{% endif %}
+                <div>
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.content }}</p>
+                </div>
+            </article>
+        {% empty %}
+            <p>История компании пока не добавлена.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="content-block">
+    <div class="section-heading">
+        <p class="eyebrow">Реквизиты</p>
+        <h2>Юридическая информация</h2>
+    </div>
+    {% if company and company.requisites %}
+        <pre class="requisites-block">{{ company.requisites }}</pre>
+    {% else %}
+        <p>Реквизиты будут добавлены позже.</p>
+    {% endif %}
+</section>
+
+<section class="content-block">
+    <div class="section-heading">
+        <p class="eyebrow">Сертификат</p>
+        <h2>Подтверждение качества</h2>
+    </div>
+    {% if company and company.certificate_text %}
+        <div class="certificate-box">
+            <p>{{ company.certificate_text }}</p>
+        </div>
+    {% else %}
+        <p>Сертификат: ООО “Digital Pro” подтверждает соответствие стандартам качества и безопасности услуг.</p>
+    {% endif %}
+</section>
+
+<section class="content-block media-row">
+    <div>
+        <h3>Компания в аудиоформате</h3>
+        <audio controls preload="none">
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+            Ваш браузер не поддерживает audio.
+        </audio>
+    </div>
+</section>
 {% endblock %}

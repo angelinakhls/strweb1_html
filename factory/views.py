@@ -1,4 +1,3 @@
-
 import base64
 import io
 import logging
@@ -35,7 +34,7 @@ from .stats_utils import (
 )
 from .models import (
     Article, Client, CompanyInfo, Employee, FAQQuestion, Furniture, FurnitureType,
-    Order, OrderItem, Promo, Review, UserProfile, Vacancy,
+    Order, OrderItem, Partner, Promo, Review, UserProfile, Vacancy,
 )
 
 logger = logging.getLogger('factory.views')
@@ -72,18 +71,46 @@ def _can_delete_order(user, order):
 
 
 def home(request):
-    """Главная: последняя опубликованная новость (публичная страница)."""
+    """Главная: последняя новость и каталог решений."""
     article = Article.objects.filter(is_published=True).first()
-    return render(request, 'factory/home.html', {'article': article})
+    products = Furniture.objects.filter(is_active=True)[:6]
+    partners = Partner.objects.filter(is_active=True)[:8]
+    return render(request, 'factory/home.html', {
+        'article': article,
+        'products': products,
+        'partners': partners,
+    })
 
 
 def about(request):
     info = CompanyInfo.objects.all().order_by('year')
-    return render(request, 'factory/about.html', {'info': info})
+    company = info.first()
+    return render(request, 'factory/about.html', {'info': info, 'company': company})
 
 
 def privacy(request):
     return render(request, 'factory/privacy.html')
+
+
+def checkout(request):
+    session_cart = request.session.get('cart', {})
+    cart_items = []
+    total_price = 0
+    for prod_id, quantity in session_cart.items():
+        try:
+            product = Furniture.objects.get(id=int(prod_id))
+            total_price += product.price * quantity
+            cart_items.append({
+                'product': product,
+                'quantity': quantity,
+                'total_price': product.price * quantity,
+            })
+        except Furniture.DoesNotExist:
+            continue
+    return render(request, 'factory/checkout.html', {
+        'cart_items': cart_items,
+        'total_price': total_price,
+    })
 
 
 def news_list(request):
@@ -163,9 +190,6 @@ def furniture_list(request):
     })
 
 
-
-    
-
 @login_required
 def furniture_create(request):
     if not can_manage_catalog(request.user):
@@ -181,10 +205,11 @@ def furniture_create(request):
         form = FurnitureForm()
     return render(request, 'factory/furniture_form.html', {'form': form, 'title': 'Добавить изделие'})
 
+
 def furniture_detail(request, pk):
     furniture = get_object_or_404(Furniture, id=pk)
     reviews = Review.objects.filter(furniture=furniture).order_by('-created_at')
-    
+
     if request.method == 'POST':
         form = ReviewForm(request.POST, request.FILES)
         if form.is_valid():
@@ -195,12 +220,13 @@ def furniture_detail(request, pk):
             return redirect('furniture_detail', pk=furniture.id)
     else:
         form = ReviewForm()
-        
+
     return render(request, 'factory/furniture_detail.html', {
         'item': furniture,
         'reviews': reviews,
         'form': form,
     })
+
 
 @login_required
 def furniture_edit(request, pk):
@@ -279,6 +305,7 @@ def cart_remove(request, furniture_id):
     messages.success(request, 'Товар удалён из корзины.')
     return redirect('/cart/')
 
+
 @login_required
 def order_create(request):
     if not can_use_cart(request.user):
@@ -350,6 +377,7 @@ def order_create(request):
         return redirect('/orders/success/')
 
     return redirect('/cart/')
+
 
 def faq_page(request):
     """Старый URL /faq/ — перенаправление на единую страницу словаря (FAQ)."""
@@ -522,18 +550,10 @@ def client_list(request):
 
 
 def glossary(request):
-    """
-    Словарь терминов и понятий (по ТЗ) = FAQ: вопрос, ответ, дата добавления.
-
-    Публично показываются только записи с is_answered=True.
-    Любой посетитель может отправить вопрос; ответ публикует менеджер/админ.
-    """
     entries = FAQQuestion.objects.filter(is_answered=True).select_related('user')
     q = request.GET.get('q', '')
     if q:
-        entries = entries.filter(
-            Q(question_text__icontains=q) | Q(answer_text__icontains=q),
-        )
+        entries = entries.filter(Q(question_text__icontains=q) | Q(answer_text__icontains=q))
     sort = request.GET.get('sort', '-created_at')
     if sort in ('created_at', '-created_at', 'question_text'):
         entries = entries.order_by(sort)
@@ -563,7 +583,6 @@ def glossary(request):
 @login_required
 @role_required(UserProfile.ROLE_MANAGER, UserProfile.ROLE_DIRECTOR)
 def glossary_create(request):
-    """Персонал публикует готовую пару вопрос–ответ в словаре (сразу на сайте)."""
     if request.method == 'POST':
         form = FAQPublishForm(request.POST)
         if form.is_valid():
@@ -587,12 +606,10 @@ def vacancies(request):
 @login_required
 @client_only
 def wholesale(request):
-    """Оптовые закупки — только зарегистрированный клиент."""
     return render(request, 'factory/wholesale.html')
 
 
 def reviews(request):
-    """Отзывы: все видят список; форма добавления — только авторизованным."""
     all_reviews = Review.objects.select_related('user', 'furniture').all()
     form = ReviewForm() if request.user.is_authenticated else None
     if request.method == 'POST':
@@ -621,7 +638,6 @@ def contacts(request):
 
 
 def _build_sales_chart():
-    """График продаж по видам мебели )."""
     data = (
         OrderItem.objects.filter(order__status='done')
         .values('furniture__furniture_type__name')
@@ -685,36 +701,30 @@ def pickup_points(request):
 
     points = PickupPoint.objects.filter(is_active=True)
     return render(request, 'factory/pickup_points.html', {'points': points})
+
+
 def register(request):
     if request.user.is_authenticated:
         return redirect('/')
 
     if request.method == 'POST':
         form = CustomRegistrationForm(request.POST)
-        
-        # ВОТ ЭТА СТРОЧКА ОБЯЗАТЕЛЬНА! Без неё cleaned_data не появится
         if form.is_valid():
-            # Создаем пользователя Django
             user = User.objects.create_user(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password']
             )
-            
-            # Создаем профиль
             UserProfile.objects.create(
                 user=user,
                 role=UserProfile.ROLE_CLIENT,
                 birth_date=form.cleaned_data['birth_date']
             )
-            
-            # Создаем клиента
             Client.objects.create(
                 user=user,
                 code=f"CL-{user.pk}",
                 name=form.cleaned_data['username'],
                 birth_date=form.cleaned_data['birth_date']
             )
-            
             login(request, user)
             messages.success(request, 'Регистрация прошла успешно.')
             return redirect('/')
@@ -722,6 +732,7 @@ def register(request):
         form = CustomRegistrationForm()
 
     return render(request, 'factory/register.html', {'form': form})
+
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -745,8 +756,8 @@ def logout_view(request):
         messages.info(request, 'Вы вышли из системы.')
     return redirect('/')
 
+
 def get_calendar_data():
     now = datetime.now()
     cal = calendar.HTMLCalendar(calendar.MONDAY)
-    
     return cal.formatmonth(now.year, now.month)

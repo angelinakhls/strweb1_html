@@ -1,27 +1,45 @@
 {% extends 'factory/base.html' %}
 {% block title %}Контакты{% endblock %}
 {% block content %}
+<section class="content-block page-intro">
+    <p class="eyebrow">Свяжитесь с нами</p>
+    <h1>Контакты</h1>
+</section>
 
-<h1>Контакты</h1>
+<section class="contact-layout">
+    <div class="contact-info">
+        <div class="info-box">
+            <h2>Компания Digital Pro</h2>
+            <p>г. Минск, ул. Платонова, 12</p>
+            <p>Телефон: +375 (29) 555-11-22</p>
+            <p>Email: support@digitalpro.by</p>
+            <p>Режим работы: Пн–Пт, 9:00–18:00</p>
+        </div>
+        <div class="info-box">
+            <h3>Как до нас добраться</h3>
+            <iframe title="Карта проезда" src="https://www.google.com/maps?q=%D0%9C%D0%B8%D0%BD%D1%81%D0%BA&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
 
-{% for emp in employees %}
-<div style="border:1px solid #ddd; padding:15px; margin:10px 0; border-radius:6px; overflow:hidden;">
-    {% if emp.photo %}
-    <img src="{{ emp.photo.url }}" style="max-width:120px; float:left; margin-right:15px;">
-    {% endif %}
-    <h2>{{ emp.full_name }}</h2>
-    <p><b>Должность:</b> {{ emp.position }}</p>
-    <p><b>Телефон:</b> {{ emp.phone }}</p>
-    {% if emp.email %}
-    <p><b>Email:</b> {{ emp.email }}</p>
-    {% endif %}
-    {% if emp.work_description %}
-    <p>{{ emp.work_description }}</p>
-    {% endif %}
-    <div style="clear:both;"></div>
-</div>
-{% empty %}
-<p>Контакты не добавлены.</p>
-{% endfor %}
-
+    <div class="team-list">
+        {% for emp in employees %}
+            <article class="team-card">
+                {% if emp.photo %}
+                    <img src="{{ emp.photo.url }}" alt="{{ emp.full_name }}" loading="lazy">
+                {% else %}
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=80" alt="Фото сотрудника" loading="lazy">
+                {% endif %}
+                <div class="team-card-body">
+                    <h3>{{ emp.full_name }}</h3>
+                    <p class="small-label">{{ emp.position }}</p>
+                    <p><strong>Телефон:</strong> {{ emp.phone }}</p>
+                    {% if emp.email %}<p><strong>Email:</strong> {{ emp.email }}</p>{% endif %}
+                    {% if emp.work_description %}<p>{{ emp.work_description }}</p>{% endif %}
+                </div>
+            </article>
+        {% empty %}
+            <p>Контактные данные не добавлены.</p>
+        {% endfor %}
+    </div>
+</section>
 {% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'factory/base.html' %}
+{% block title %}Оплата{% endblock %}
+{% block content %}
+<section class="content-block page-intro">
+    <p class="eyebrow">Оплата</p>
+    <h1>Оформление заказа</h1>
+</section>
+
+{% if cart_items %}
+    <div class="checkout-layout">
+        <section class="checkout-order">
+            <h2>Ваш заказ</h2>
+            {% for item in cart_items %}
+                <div class="checkout-item">
+                    <span>{{ item.product.name }} × {{ item.quantity }}</span>
+                    <strong>{{ item.total_price }} BYN</strong>
+                </div>
+            {% endfor %}
+            <div class="checkout-total">
+                <span>Итого</span>
+                <strong>{{ total_price }} BYN</strong>
+            </div>
+        </section>
+
+        <section class="form-box checkout-form">
+            <h2>Способ оплаты</h2>
+            <form method="post" action="{% url 'order_create' %}">
+                {% csrf_token %}
+                <div class="field-group">
+                    <label for="pickup_point">Пункт выдачи</label>
+                    <select id="pickup_point" name="pickup_point" required>
+                        <option value="">Выберите пункт выдачи</option>
+                        <option value="Минск, проспект Независимости 15">Минск, проспект Независимости 15</option>
+                        <option value="Гродно, ул. Ленина 7">Гродно, ул. Ленина 7</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="delivery_address">Адрес доставки</label>
+                    <input id="delivery_address" type="text" name="delivery_address" placeholder="Улица, дом, квартира" required>
+                </div>
+                <div class="field-group">
+                    <label for="promo_code">Промокод</label>
+                    <input id="promo_code" type="text" name="promo_code" placeholder="Например: WELCOME10">
+                </div>
+                <div class="field-group">
+                    <label for="card_number">Номер карты</label>
+                    <input id="card_number" type="text" name="card_number" inputmode="numeric" pattern="[0-9 ]{13,19}" placeholder="1234 5678 9012 3456" required>
+                </div>
+                <div class="field-group">
+                    <label for="card_name">Имя держателя</label>
+                    <input id="card_name" type="text" name="card_name" placeholder="IVAN IVANOV" required>
+                </div>
+                <button type="submit" class="btn">Подтвердить оплату</button>
+            </form>
+        </section>
+    </div>
+{% else %}
+    <p class="notice-box">Корзина пуста. Для оплаты сначала добавьте товары.</p>
+{% endif %}
+{% endblock %}

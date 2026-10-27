@@ -1,19 +1,22 @@
 {% extends 'factory/base.html' %}
-{% load tz %}
 {% block title %}Вакансии{% endblock %}
 {% block content %}
-<h1>Вакансии</h1>
-<table>
-    <tr><th>Должность</th><th>Описание</th><th>Добавлено (локально)</th><th>Добавлено (UTC)</th></tr>
+<section class="content-block page-intro">
+    <p class="eyebrow">Карьера</p>
+    <h1>Вакансии</h1>
+</section>
+
+<div class="vacancy-list">
     {% for vacancy in vacancies %}
-    <tr>
-        <td>{{ vacancy.title }}</td>
-        <td>{{ vacancy.description }}</td>
-        <td>{{ vacancy.created_at_local|default:vacancy.created_at_utc|date:"d/m/Y H:i:s" }}</td>
-        <td>{% timezone "UTC" %}{{ vacancy.created_at_utc|date:"d/m/Y H:i:s" }}{% endtimezone %}</td>
-    </tr>
+        <article class="vacancy-card">
+            <h2>{{ vacancy.title }}</h2>
+            <p>{{ vacancy.description }}</p>
+            <div class="meta-row">
+                <time datetime="{{ vacancy.created_at_local|default:vacancy.created_at_utc|date:'c' }}">{{ vacancy.created_at_local|default:vacancy.created_at_utc|date:'d.m.Y H:i' }}</time>
+            </div>
+        </article>
     {% empty %}
-    <tr><td colspan="4">Открытых вакансий нет</td></tr>
+        <p>На данный момент открытых вакансий нет.</p>
     {% endfor %}
-</table>
+</div>
 {% endblock %}

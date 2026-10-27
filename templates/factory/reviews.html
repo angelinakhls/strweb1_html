@@ -1,30 +1,50 @@
 {% extends 'factory/base.html' %}
 {% block title %}Отзывы{% endblock %}
 {% block content %}
-<h1>Отзывы</h1>
+<section class="content-block page-intro">
+    <p class="eyebrow">Отзывы клиентов</p>
+    <h1>Что говорят о нас</h1>
+</section>
+
 {% if user.is_authenticated %}
-<h2>Оставить отзыв</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn">Отправить</button>
-</form>
+    <section class="content-block form-box">
+        <h2>Оставить отзыв</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="field-group">
+                <label for="id_rating">Оценка</label>
+                {{ form.rating }}
+            </div>
+            <div class="field-group">
+                <label for="id_text">Текст отзыва</label>
+                {{ form.text }}
+            </div>
+            <div class="field-group">
+                <label for="id_image">Фото</label>
+                {{ form.image }}
+            </div>
+            <button type="submit" class="btn">Отправить</button>
+        </form>
+    </section>
 {% else %}
-<p>Чтобы оставить отзыв, <a href="/login/">войдите</a> или <a href="/register/">зарегистрируйтесь</a>.</p>
+    <p class="notice-box">Чтобы оставить отзыв, <a href="{% url 'login' %}">войдите</a> или <a href="{% url 'register' %}">зарегистрируйтесь</a>.</p>
 {% endif %}
-<hr>
-<table>
-<tr><th>Пользователь</th><th>Товар</th><th>Оценка</th><th>Текст</th><th>Дата</th></tr>
-{% for r in reviews %}
-<tr>
-    <td>{{ r.user.username }}</td>
-    <td>{{ r.furniture.name }}</td>
-    <td>{{ r.rating }}★</td>
-    <td>{{ r.text }}</td>
-    <td>{{ r.created_at|date:"d/m/Y" }}</td>
-</tr>
-{% empty %}
-<tr><td colspan="5">Отзывов нет</td></tr>
-{% endfor %}
-</table>
+
+<section class="review-list">
+    {% for review in reviews %}
+        <article class="review-card">
+            <header>
+                <h3>{{ review.user.username }}</h3>
+                <span class="rating-stars">{{ review.rating }}★</span>
+                <time>{{ review.created_at|date:'d.m.Y' }}</time>
+            </header>
+            <p>{{ review.text|default:'Отзыв без текста.' }}</p>
+            {% if review.image %}
+                <img src="{{ review.image.url }}" alt="Фотография к отзыву" loading="lazy">
+            {% endif %}
+        </article>
+    {% empty %}
+        <p>Пока нет отзывов.</p>
+    {% endfor %}
+</section>
 {% endblock %}

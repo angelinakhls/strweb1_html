@@ -1,17 +1,116 @@
 {% extends 'factory/base.html' %}
-{% block title %}Главная{% endblock %}
+{% block title %}Главная | Digital Pro{% endblock %}
 {% block content %}
-<h1>Добро пожаловать на сайт мебельной фабрики</h1>
-{% if article %}
-<div style="border:1px solid #ddd; padding:20px; margin:20px 0; border-radius: 5px;">
-    <h2>Последняя новость: {{ article.title }}</h2>
-    <p>{{ article.summary }}</p>
-    
-    <div style="margin-top: 15px;"> <small style="color: #666; display: block; margin-bottom: 10px;">{{ article.published_at|date:"d/m/Y" }}</small>
-        <a href="/news/{{ article.pk }}/" style="display: inline-block; padding: 10px 20px; background-color: #34495e; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Читать далее</a>
+<section class="hero banner-card" aria-labelledby="hero-heading">
+    <div class="hero-copy">
+        <p class="eyebrow">Платформа цифрового роста</p>
+        <h1 id="hero-heading">Решения, которые помогают вашему бизнесу расти</h1>
+        <p>Создаём продукты и услуги для компаний, которые хотят увеличить лояльность клиентов, автоматизировать процессы и выйти на новый уровень продаж.</p>
+        <div class="hero-actions">
+            <a class="btn" href="#catalog">Смотреть каталог</a>
+            <a class="btn btn-secondary" href="{% url 'about' %}">О компании</a>
+        </div>
+        <ul class="hero-stats" aria-label="Ключевые показатели компании">
+            <li><strong>12+</strong><span>лет опыта</span></li>
+            <li><strong>90%</strong><span>клиентов рекомендуют</span></li>
+            <li><strong>250+</strong><span>успешных проектов</span></li>
+        </ul>
     </div>
-</div>
-{% else %}
-<p>Новостей пока нет.</p>
-{% endif %}
+    <div class="hero-visual">
+        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80" alt="Команда компании на рабочем совещании" loading="lazy">
+    </div>
+</section>
+
+<section class="promo-strip" aria-label="Партнёры и преимущества">
+    <div class="promo-item">
+        <strong>Скорость</strong>
+        <span>Быстрая реализация решений</span>
+    </div>
+    <div class="promo-item">
+        <strong>Поддержка</strong>
+        <span>Команда экспертов 24/7</span>
+    </div>
+    <div class="promo-item">
+        <strong>Гарантия</strong>
+        <span>Проверенные технологии</span>
+    </div>
+</section>
+
+<section class="content-block" id="catalog">
+    <div class="section-heading">
+        <p class="eyebrow">Каталог</p>
+        <h2>Услуги и продукты компании</h2>
+    </div>
+    <div class="card-grid three-col">
+        {% for product in products %}
+            <article class="product-card">
+                <div class="card-image-wrap">
+                    {% if product.photo %}
+                        <img src="{{ product.photo.url }}" alt="{{ product.name }}" loading="lazy">
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=80" alt="Продукт компании" loading="lazy">
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <p class="small-label">{{ product.furniture_type.name }}</p>
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description|truncatechars:110 }}</p>
+                    <div class="price-row">
+                        <strong>{{ product.price }} BYN</strong>
+                        <a class="btn btn-small" href="{% url 'furniture_detail' product.id %}">Подробнее</a>
+                    </div>
+                </div>
+            </article>
+        {% empty %}
+            <p>Каталог пока пуст.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="content-block news-highlight">
+    <div class="section-heading">
+        <p class="eyebrow">Новости</p>
+        <h2>Последняя публикация</h2>
+    </div>
+    {% if article %}
+        <article class="feature-news">
+            <img src="{% if article.image %}{{ article.image.url }}{% else %}https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80{% endif %}" alt="{{ article.title }}" loading="lazy">
+            <div>
+                <p class="meta-line"><time datetime="{{ article.published_at|date:'c' }}">{{ article.published_at|date:'d.m.Y' }}</time></p>
+                <h3>{{ article.title }}</h3>
+                <p>{{ article.summary }}</p>
+                <a class="btn btn-secondary" href="{% url 'news_detail' article.pk %}">Читать далее</a>
+            </div>
+        </article>
+    {% else %}
+        <p>Публикаций пока нет.</p>
+    {% endif %}
+</section>
+
+<section class="content-block">
+    <div class="section-heading">
+        <p class="eyebrow">Партнёры</p>
+        <h2>Компании, с которыми мы сотрудничаем</h2>
+    </div>
+    <div class="partners-grid">
+        {% for partner in partners %}
+            <a class="partner-card" href="{{ partner.website|default:'#' }}" target="_blank" rel="noopener" aria-label="Сайт {{ partner.name }}">
+                {% if partner.logo %}
+                    <img src="{{ partner.logo.url }}" alt="Логотип {{ partner.name }}" loading="lazy">
+                {% else %}
+                    <div class="partner-fallback">{{ partner.name }}</div>
+                {% endif %}
+            </a>
+        {% empty %}
+            <p>Партнёры пока не добавлены.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="content-block quote-box">
+    <blockquote>
+        <p>«Мы строим удобные и безопасные цифровые решения, которые помогают клиентам принимать решения быстрее и эффективнее».</p>
+        <cite>— Команда Digital Pro</cite>
+    </blockquote>
+</section>
 {% endblock %}
