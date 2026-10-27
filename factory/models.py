@@ -212,6 +212,7 @@ class Furniture(models.Model):
         if self.price is not None and self.price < 0:
             raise ValidationError({'price': 'Цена не может быть отрицательной.'})
 
+
 class Order(models.Model):
     STATUS_CHOICES = [
         ('new', 'Новый'),
@@ -326,15 +327,13 @@ class GlossaryTerm(models.Model):
         return self.term
 
 
-
-
 class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     furniture = models.ForeignKey('Furniture', on_delete=models.CASCADE)
     rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])
-    text = models.TextField(blank=True, null=True) # Текст по желанию
-    image = models.ImageField(upload_to='reviews/', blank=True, null=True) # Фото по желанию
-    created_at = models.DateTimeField(auto_now_add=True) # Дата фиксируется сама
+    text = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='reviews/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = 'Отзыв'
@@ -397,7 +396,7 @@ class Promo(models.Model):
 
     class Meta:
         verbose_name = 'Промокод'
-        verbose_name_plural = 'Промокоды'
+        verbose_name_plural = 'Промок��ды'
 
     def __str__(self):
         return f'{self.code} — {self.discount_percent}%'
@@ -409,10 +408,31 @@ class Promo(models.Model):
             raise ValidationError({'valid_until': 'Дата окончания не может быть в прошлом.'})
 
 
+class Partner(models.Model):
+    name = models.CharField('Название компании', max_length=200)
+    website = models.URLField('Сайт', blank=True)
+    logo = models.ImageField('Логотип', upload_to='partners/', blank=True, null=True)
+    description = models.TextField('Описание', blank=True)
+    is_active = models.BooleanField('Активен', default=True)
+
+    class Meta:
+        verbose_name = 'Партнёр'
+        verbose_name_plural = 'Партнёры'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
 class CompanyInfo(models.Model):
     title = models.CharField('Заголовок', max_length=200)
     content = models.TextField('Текст')
     year = models.PositiveIntegerField('Год', null=True, blank=True)
+    logo = models.ImageField('Логотип компании', upload_to='company/', blank=True, null=True)
+    video_url = models.URLField('Видео', max_length=500, blank=True)
+    requisites = models.TextField('Реквизиты', blank=True, default='')
+    certificate_text = models.TextField('Текст сертификата', blank=True, default='')
+    history = models.TextField('История по годам', blank=True, default='')
 
     class Meta:
         verbose_name = 'О компании'
