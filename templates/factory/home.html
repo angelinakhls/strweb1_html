@@ -1,17 +1,277 @@
 {% extends 'factory/base.html' %}
+{% load static %}
+
 {% block title %}Главная{% endblock %}
+
 {% block content %}
-<h1>Добро пожаловать на сайт мебельной фабрики</h1>
-{% if article %}
-<div style="border:1px solid #ddd; padding:20px; margin:20px 0; border-radius: 5px;">
-    <h2>Последняя новость: {{ article.title }}</h2>
-    <p>{{ article.summary }}</p>
-    
-    <div style="margin-top: 15px;"> <small style="color: #666; display: block; margin-bottom: 10px;">{{ article.published_at|date:"d/m/Y" }}</small>
-        <a href="/news/{{ article.pk }}/" style="display: inline-block; padding: 10px 20px; background-color: #34495e; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Читать далее</a>
-    </div>
-</div>
-{% else %}
-<p>Новостей пока нет.</p>
-{% endif %}
+<main class="page-content">
+    <section class="hero banner-card" aria-labelledby="hero-heading">
+        <div class="hero-copy">
+            <p class="eyebrow">Собственное производство</p>
+            <h1 id="hero-heading">Мебель для жизни, работы и отдыха</h1>
+            <p>
+                Мы создаём комфортные решения для дома, офиса и коммерческих помещений:
+                удобные шкафы, современные столы, мягкие диваны и функциональные системы хранения.
+            </p>
+            <div class="cta-row">
+                <a class="button primary" href="/furniture/">Каталог</a>
+                <a class="button secondary" href="/contacts/">Контакты</a>
+            </div>
+        </div>
+
+        <figure class="hero-visual">
+            <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80" alt="Современный интерьер с мебелью фабрики">
+            <figcaption>Мебель, которая объединяет стиль и удобство.</figcaption>
+        </figure>
+    </section>
+
+    <section class="stats-grid" aria-label="Наши преимущества">
+        <article class="stat-card">
+            <strong>15+</strong>
+            <span>лет опыта</span>
+        </article>
+        <article class="stat-card">
+            <strong>3 500</strong>
+            <span>изделий в год</span>
+        </article>
+        <article class="stat-card">
+            <strong>98%</strong>
+            <span>довольных клиентов</span>
+        </article>
+        <article class="stat-card">
+            <strong>24/7</strong>
+            <span>поддержка</span>
+        </article>
+    </section>
+
+    <section class="content-grid" aria-label="Основные особенности">
+        <article class="info-card">
+            <h2>Почему выбирают нас</h2>
+            <ul>
+                <li>Собственное производство и контроль качества</li>
+                <li>Индивидуальный подход к проектам</li>
+                <li>Гарантия на материалы и сборку</li>
+            </ul>
+        </article>
+
+        <article class="info-card">
+            <h2>Наши материалы</h2>
+            <ol>
+                <li>ЛДСП и массив дерева</li>
+                <li>Экологичные покрытия</li>
+                <li>Металл и стекло в корпусных изделиях</li>
+            </ol>
+        </article>
+    </section>
+
+    <section class="section-card" id="features">
+        <h2>Семантическое выделение текста</h2>
+        <p>
+            В HTML мы можем выделять <mark>важные фрагменты</mark>, использовать
+            <abbr title="HyperText Markup Language">HTML</abbr>,
+            <dfn>семантическую разметку</dfn> и подробные подсказки к терминам.
+            Текст может быть <strong>усиленным</strong>, <em>акцентированным</em>
+            и <small>мелким по масштабу</small>.
+        </p>
+
+        <blockquote cite="https://developer.mozilla.org/ru/docs/Learn/HTML/Introduction_to_HTML/Document_and_website_structure">
+            «Семантическая разметка помогает браузерам, поисковым системам и людям лучше понимать структуру страницы.»
+        </blockquote>
+    </section>
+
+    <section class="section-card" id="poem">
+        <h2>Текст в виде четверостишия</h2>
+        <pre class="poem-block"><code>Дом — это тишина и свет,
+Найденный в каждом предмете.
+Мы делаем мебель не для мгновенья,
+А для жизни, в которой есть тепло и комфорт.</code></pre>
+        <p><small>Пример фиксированной строки с переводом строки через <code>&lt;br&gt;</code> или <code>&lt;pre&gt;</code>.</small></p>
+    </section>
+
+    <section class="two-column">
+        <article class="section-card">
+            <h2>Списки</h2>
+            <ul class="check-list">
+                <li>Ссылки и якоря</li>
+                <li>Контейнеры и секции</li>
+                <li>Таблицы �� формы</li>
+            </ul>
+
+            <ol class="ordered-list">
+                <li>Подключить стили</li>
+                <li>Построить структуру</li>
+                <li>Проверить доступность</li>
+            </ol>
+        </article>
+
+        <aside class="section-card info-panel">
+            <h2>Определения</h2>
+            <dl>
+                <dt>HTML</dt>
+                <dd>Язык разметки гипертекстовых документов.</dd>
+
+                <dt>CSS</dt>
+                <dd>Язык описания внешнего вида документов.</dd>
+
+                <dt>SEO</dt>
+                <dd>Поисковая оптимизация для улучшения индексации.</dd>
+            </dl>
+        </aside>
+    </section>
+
+    <section class="section-card">
+        <h2>Таблица с заголовочными ячейками</h2>
+        <table>
+            <caption>Показатели фабрики</caption>
+            <thead>
+                <tr>
+                    <th rowspan="2">Показатель</th>
+                    <th colspan="2">2024</th>
+                    <th rowspan="2">Примечание</th>
+                </tr>
+                <tr>
+                    <th>Янв</th>
+                    <th>Дек</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Заказы</td>
+                    <td>240</td>
+                    <td>420</td>
+                    <td>Рост 75%</td>
+                </tr>
+                <tr>
+                    <td>Склад</td>
+                    <td>15</td>
+                    <td>28</td>
+                    <td>Новый ассортимент</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">Итог: стабильный рост и улучшение качества обслуживания.</td>
+                </tr>
+            </tfoot>
+        </table>
+    </section>
+
+    <section class="section-card" id="forms-demo">
+        <h2>Формы и элементы управления</h2>
+        <form class="demo-form" action="#" method="post">
+            <fieldset>
+                <legend>Заявка на консультацию</legend>
+                <div class="form-grid">
+                    <label>
+                        Имя
+                        <input type="text" name="name" placeholder="Введите имя" required>
+                    </label>
+
+                    <label>
+                        Email
+                        <input type="email" name="email" placeholder="name@example.com" required>
+                    </label>
+
+                    <label>
+                        Телефон
+                        <input type="tel" name="phone" placeholder="+375 29 123 45 67">
+                    </label>
+
+                    <label>
+                        Дата встречи
+                        <input type="date" name="date">
+                    </label>
+
+                    <label>
+                        Тип проекта
+                        <select name="project-type">
+                            <option value="home">Дом</option>
+                            <option value="office">Офис</option>
+                            <option value="retail">Розница</option>
+                            <option value="custom">Индивидуальный заказ</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Бюджет
+                        <input type="number" name="budget" min="500" step="100" value="1500">
+                    </label>
+
+                    <label class="full-width">
+                        Комментарий
+                        <textarea name="comment" rows="4" placeholder="Опишите задачу..."></textarea>
+                    </label>
+
+                    <label class="checkbox-line">
+                        <input type="checkbox" name="agree" checked>
+                        Согласен на обработку данных
+                    </label>
+
+                    <div class="range-wrap full-width">
+                        <label for="priority">Приоритет</label>
+                        <input id="priority" type="range" min="1" max="10" value="7">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="button primary">Отправить</button>
+                    <button type="reset" class="button secondary">Сброс</button>
+                </div>
+            </fieldset>
+        </form>
+    </section>
+
+    <section class="section-card media-layout">
+        <div>
+            <h2>Изображения</h2>
+            <figure class="gallery-figure">
+                <img src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=900&q=80" alt="Современная гостиная с мягкой мебелью" class="responsive-image">
+                <figcaption>Фотография комнаты с мебелью фабрики.</figcaption>
+            </figure>
+            <p><a href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" download>Скачать пример документа</a></p>
+        </div>
+
+        <div>
+            <h2>Видео и аудио</h2>
+            <video controls preload="metadata" poster="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80">
+                <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+                Ваш браузер не поддерживает видео.
+            </video>
+
+            <audio controls>
+                <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+                Ваш браузер не поддерживает аудио.
+            </audio>
+        </div>
+    </section>
+
+    <section class="section-card">
+        <h2>Навигация и якоря</h2>
+        <nav aria-label="Навигация внутри страницы">
+            <ul class="inline-nav">
+                <li><a href="#features">Преимущества</a></li>
+                <li><a href="#poem">Четверостишие</a></li>
+                <li><a href="#forms-demo">Форма</a></li>
+            </ul>
+        </nav>
+    </section>
+
+    <section class="section-card">
+        <h2>iframe</h2>
+        <iframe title="Пример карты" src="https://www.google.com/maps?q=Minsk&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </section>
+
+    {% if article %}
+    <article class="news-spotlight section-card">
+        <h2>Последняя новость</h2>
+        <p class="meta">{{ article.published_at|date:"d/m/Y" }}</p>
+        <h3>{{ article.title }}</h3>
+        <p>{{ article.summary }}</p>
+        <a href="/news/{{ article.pk }}/" class="button primary">Читать далее</a>
+    </article>
+    {% else %}
+    <p class="empty-state">Новостей пока нет.</p>
+    {% endif %}
+</main>
 {% endblock %}
+

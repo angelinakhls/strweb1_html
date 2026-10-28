@@ -1,93 +1,102 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Мебельная фабрика. Каталог мебели, новости, акции, контакты и доставка по Беларуси.">
+    <meta name="keywords" content="мебель, фабрика, шкафы, диваны, столы, кровати, каталог, доставка, белоруссия">
+    <meta name="author" content="Мебельная фабрика">
+    <meta name="theme-color" content="#1d4d42">
+    <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <title>{% block title %}Мебельная фабрика{% endblock %}</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #333; display: flex; min-height: 100vh; }
-        .sidebar { width: 250px; min-width: 250px; padding: 20px; border-right: 1px solid #ddd; }
-        .sidebar a { display: block; color: #333; text-decoration: none; padding: 8px 0; font-size: 14px; }
-        .sidebar a:hover { text-decoration: underline; }
-        .container { flex-grow: 1; padding: 20px 40px; }
-        .account-box { padding-bottom: 15px; margin-bottom: 15px; border-bottom: 1px dashed #ddd; font-size: 14px; }
-        .logout-btn { background: none; border: none; color: #c0392b; cursor: pointer; text-decoration: underline; font-size: 14px; padding: 0; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
-        th { background: #f5f5f5; }
-        .success { color: #155724; background: #d4edda; padding: 10px; margin-bottom: 15px; }
-        .error { color: #721c24; background: #f8d7da; padding: 10px; margin-bottom: 15px; }
-        pre.cal { font-family: monospace; font-size: 11px; background: #f8f9fa; padding: 6px; border: 1px solid #e9ecef; }
-        .role-hint { font-size: 12px; color: #666; font-style: italic; margin: 0 0 6px 0; }
-        .menu-divider { border-top: 1px solid #eee; margin: 10px 0; }
-    </style>
 </head>
-<body>
+<body itemscope itemtype="https://schema.org/Organization">
+    <div class="page-shell">
+        <header class="site-header">
+            <div class="brand-block">
+                <a href="/" class="brand" aria-label="Главная страница">
+                    <span class="brand-mark">M</span>
+                    <span>
+                        <strong>Мебельная</strong><br>
+                        <small>фабрика</small>
+                    </span>
+                </a>
+            </div>
 
-<div class="sidebar">
+            <nav class="site-nav" aria-label="Основное меню">
+                <ul class="nav-list">
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/news/">Новости</a></li>
+                    <li><a href="/furniture/">Каталог</a></li>
+                    <li><a href="/glossary/">FAQ</a></li>
+                    <li><a href="/contacts/">Контакты</a></li>
+                </ul>
+            </nav>
 
-    <div class="account-box">
-    {% if user.is_authenticated %}
-        <p style="margin:0 0 4px 0; font-weight:bold;">{{ user.username }}</p>
-        <p class="role-hint">
-            {% if user.is_staff %}
-                Администратор<br>
-                <a href="/admin/" style="font-size: 12px; color: blue;">Админ-панель</a>
-            {% else %}
-                Пользователь
-            {% endif %}
-        </p>
-        <form method="post" action="/logout/" style="display:inline;">
-            {% csrf_token %}
-            <button class="logout-btn" type="submit">Выйти</button>
-        </form>
-    {% else %}
-        <p class="role-hint">Гость</p>
-        <a href="/login/">Войти</a>
-        <a href="/register/">Регистрация</a>
-    {% endif %}
-</div>
+            <aside class="topbar-user" aria-label="Профиль пользователя">
+                {% if user.is_authenticated %}
+                    <div class="user-box">
+                        <span class="user-name">{{ user.username }}</span>
+                        {% if user.is_staff %}
+                            <a href="/admin/">Админ-панель</a>
+                        {% else %}
+                            <span>Пользователь</span>
+                        {% endif %}
+                        <form method="post" action="/logout/">
+                            {% csrf_token %}
+                            <button type="submit" class="logout-btn">Выйти</button>
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="guest-box">
+                        <span>Гость</span>
+                        <a href="/login/">Войти</a>
+                        <a href="/register/">Регистрация</a>
+                    </div>
+                {% endif %}
+            </aside>
+        </header>
 
+        <div class="layout">
+            <aside class="sidebar" aria-label="Боковое меню">
+                <div class="sidebar-card">
+                    <h2>Курс и время</h2>
+                    <p>Курс USD: <strong>{{ usd_rate }} BYN</strong></p>
+                    <p>Город: <strong>{{ USER_CITY }}</strong></p>
+                    <p>Местное: <strong>{{ current_time_local }}</strong></p>
+                    <p>UTC: <strong>{{ current_time_utc }}</strong></p>
+                    <pre class="calendar-box">{{ text_calendar }}</pre>
+                </div>
 
-    
-    <div style="font-size:13px;color:#555;margin-bottom:15px;border-bottom:1px dashed #ddd;padding-bottom:15px;">
-    Курс USD: <b>{{ usd_rate }} BYN</b><br>
-    Город: <b>{{ USER_CITY }}</b><br>
-    Местное: <b>{{ current_time_local }}</b><br>
-    UTC: <b>{{ current_time_utc }}</b> <pre style="font-family: monospace; margin: 10px 0;">{{ text_calendar }}</pre>
-</div>
+                <div class="sidebar-links">
+                    <a href="/">Главная</a>
+                    <a href="/news/">Новости</a>
+                    <a href="/furniture/">Каталог изделий</a>
+                    <a href="/glossary/">Словарь терминов</a>
+                    <a href="/contacts/">Контакты</a>
 
-    <a href="/">Главная</a>
-    <a href="/news/">Новости</a>
-    <a href="/furniture/">Каталог изделий</a>
-    <a href="/glossary/">Словарь терминов (FAQ)</a>
-    
-    <a href="/contacts/">Контакты</a>
+                    {% if user.is_authenticated %}
+                        {% if nav.show_wholesale %}<a href="/wholesale/">Оптовые закупки</a>{% endif %}
+                        {% if nav.show_cart %}<a href="/cart/">Корзина</a>{% endif %}
+                        {% if nav.show_orders %}<a href="/orders/">Заказы</a>{% endif %}
+                        {% if user.is_staff or nav.show_catalog_manage %}
+                            {% if nav.show_statistics %}<a href="/statistics/">Статистика</a>{% endif %}
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </aside>
 
-    {% if user.is_authenticated %}
-        <div class="menu-divider"></div>
-        {% if nav.show_wholesale %}<a href="/wholesale/">Оптовые закупки</a>{% endif %}
-        {% if nav.show_cart %}<a href="/cart/">Корзина</a>{% endif %}
-        {% if nav.show_orders %}<a href="/orders/">Заказы</a>{% endif %}
-
-        {% if user.is_staff or nav.show_catalog_manage %}
-            <div class="menu-divider"></div>
-            
-            
-            {% if nav.show_statistics %}<a href="/statistics/">Статистика</a>{% endif %}
-            
-        {% endif %}
-    {% endif %}
-
-</div>
-
-<div class="container">
-    {% if messages %}
-        {% for message in messages %}
-            <div class="{{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
-    {% block content %}{% endblock %}
-</div>
-
+            <main class="main-content">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="message {{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
 </body>
 </html>
