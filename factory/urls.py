@@ -5,7 +5,6 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('about/', views.about, name='about'),
-    path('html-demo/', views.html_demo, name='html_demo'),
     path('news/', views.news_list, name='news'),
     re_path(r'^news/(?P<pk>\d+)/$', views.news_detail, name='news_detail'),
     path('news/create/', views.article_create, name='article_create'),
