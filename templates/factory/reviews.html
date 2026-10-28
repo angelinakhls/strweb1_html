@@ -3,28 +3,73 @@
 {% block content %}
 <h1>Отзывы</h1>
 {% if user.is_authenticated %}
-<h2>Оставить отзыв</h2>
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" class="review-form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn">Отправить</button>
+    <fieldset>
+        <legend>Оставить отзыв</legend>
+        <div class="form-grid">
+            <label>
+                Изделие
+                {{ form.furniture }}
+            </label>
+            <label>
+                Оценка (1–5)
+                {{ form.rating }}
+            </label>
+            <label class="full-width">
+                Текст
+                {{ form.text }}
+            </label>
+            <label>
+                Фото
+                {{ form.image }}
+            </label>
+            <label>
+                Служебное поле
+                <input type="text" name="internal" value="Не редактируется" disabled>
+            </label>
+            <label class="checkbox-line">
+                <input type="checkbox" name="public" checked>
+                Показать отзыв на сайте
+            </label>
+        </div>
+        {% if form.errors %}
+        <p class="message error">{{ form.errors }}</p>
+        {% endif %}
+        <div class="form-actions">
+            <button type="submit" class="btn">Отправить</button>
+        </div>
+    </fieldset>
 </form>
 {% else %}
 <p>Чтобы оставить отзыв, <a href="/login/">войдите</a> или <a href="/register/">зарегистрируйтесь</a>.</p>
 {% endif %}
-<hr>
+
 <table>
-<tr><th>Пользователь</th><th>Товар</th><th>Оценка</th><th>Текст</th><th>Дата</th></tr>
-{% for r in reviews %}
-<tr>
-    <td>{{ r.user.username }}</td>
-    <td>{{ r.furniture.name }}</td>
-    <td>{{ r.rating }}★</td>
-    <td>{{ r.text }}</td>
-    <td>{{ r.created_at|date:"d/m/Y" }}</td>
-</tr>
-{% empty %}
-<tr><td colspan="5">Отзывов нет</td></tr>
-{% endfor %}
+    <caption>Опубликованные отзывы клиентов</caption>
+    <thead>
+        <tr>
+            <th>Пользователь</th>
+            <th>Товар</th>
+            <th>Оценка</th>
+            <th>Текст</th>
+            <th>Дата</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in reviews %}
+        <tr>
+            <td>{{ r.user.username }}</td>
+            <td>{{ r.furniture.name }}</td>
+            <td>{{ r.rating }}★</td>
+            <td>{{ r.text }}</td>
+            <td>{{ r.created_at|date:"d/m/Y" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">Отзывов нет</td>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
 {% endblock %}

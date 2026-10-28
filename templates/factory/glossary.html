@@ -2,10 +2,10 @@
 {% block title %}Словарь терминов и понятий{% endblock %}
 {% block content %}
 <h1>Словарь терминов и понятий</h1>
-<p>Часто задаваемые вопросы и ответы с датой добавления на сайт (по заданию лабораторной).</p>
+<p>Часто задаваемые вопросы с датой добавления: нажмите вопрос, чтобы открыть ответ.</p>
 
-<form method="get" style="margin-bottom:15px;">
-    <input type="text" name="q" value="{{ q }}" placeholder="Поиск по вопросу или ответу...">
+<form method="get" class="catalog-toolbar">
+    <input type="search" name="q" value="{{ q }}" placeholder="Поиск по вопросу или ответу...">
     <select name="sort">
         <option value="-created_at" {% if sort == '-created_at' %}selected{% endif %}>Сначала новые</option>
         <option value="created_at" {% if sort == 'created_at' %}selected{% endif %}>Сначала старые</option>
@@ -15,22 +15,29 @@
     {% if can_publish %}<a href="/glossary/create/" class="btn">+ Опубликовать Q&amp;A</a>{% endif %}
 </form>
 
-<table>
-    <tr><th>Дата</th><th>Вопрос</th><th>Ответ</th></tr>
-    {% for entry in entries %}
-    <tr>
-        <td>{{ entry.created_at|date:"d/m/Y" }}</td>
-        <td><b>{{ entry.question_text }}</b></td>
-        <td>{{ entry.answer_text }}</td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="3">Пока нет опубликованных записей. Добавьте их в админке или задайте вопрос ниже.</td></tr>
-    {% endfor %}
-</table>
+{% for entry in entries %}
+<details class="faq-accordion">
+    <summary>
+        {{ entry.question_text }}
+        <time datetime="{{ entry.created_at|date:'Y-m-d' }}">{{ entry.created_at|date:"d/m/Y" }}</time>
+    </summary>
+    <p>{{ entry.answer_text }}</p>
+</details>
+{% empty %}
+<details class="faq-accordion" open>
+    <summary>Как заказать мебель на фабрике? <time>01/03/2026</time></summary>
+    <p>Выберите изделие в каталоге, добавьте в корзину и оформите заказ. Менеджер подтвердит сроки.</p>
+</details>
+<details class="faq-accordion">
+    <summary>Есть ли доставка по Беларуси? <time>12/04/2026</time></summary>
+    <p>Да, доставляем на дом и в пункты самовывоза. Стоимость зависит от объёма заказа.</p>
+</details>
+<p class="empty-state">Опубликованных записей из базы пока нет — показаны примеры. Задайте вопрос ниже.</p>
+{% endfor %}
 
 <h2>Задать вопрос</h2>
-<p>Ответ появится в таблице после проверки менеджером.</p>
-<form method="post">
+<p>Ответ появится после проверки менеджером.</p>
+<form method="post" class="demo-form">
     {% csrf_token %}
     <input type="hidden" name="form_type" value="ask">
     {{ ask_form.as_p }}

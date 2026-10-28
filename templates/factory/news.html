@@ -3,8 +3,8 @@
 {% block content %}
 <h1>Новости</h1>
 
-<form method="get" style="margin-bottom:15px;">
-    <input type="text" name="q" value="{{ q }}" placeholder="Поиск по заголовку...">
+<form method="get" class="catalog-toolbar">
+    <input type="search" name="q" value="{{ q }}" placeholder="Поиск по заголовку...">
     <select name="sort">
         <option value="-published_at" {% if sort == '-published_at' %}selected{% endif %}>Сначала новые</option>
         <option value="published_at" {% if sort == 'published_at' %}selected{% endif %}>Сначала старые</option>
@@ -17,21 +17,34 @@
     {% endif %}
 </form>
 
-<table>
-    <tr><th>Заголовок</th><th>Кратко</th><th>Дата</th><th></th></tr>
+<div class="news-grid">
     {% for article in articles %}
-    <tr>
-        <td><a href="/news/{{ article.pk }}/">{{ article.title }}</a></td>
-        <td>{{ article.summary|truncatechars:80 }}</td>
-        <td>{{ article.published_at|date:"d/m/Y H:i" }}</td>
-        <td>
+    <article class="news-card">
+        {% if article.image %}
+        <img src="{{ article.image.url }}" alt="{{ article.title }}">
+        {% else %}
+        <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80" alt="{{ article.title }}">
+        {% endif %}
+        <div class="news-card-body">
+            <h2>{{ article.title }}</h2>
+            <p class="news-excerpt">{{ article.summary }}</p>
+            <a class="button primary" href="/news/{{ article.pk }}/">Читать далее</a>
             {% if user_role == 'manager' or user_role == 'director' %}
-            <a href="/news/{{ article.pk }}/edit/">Изменить</a>
+            <p><a href="/news/{{ article.pk }}/edit/">Изменить</a></p>
             {% endif %}
-        </td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="4">Новостей нет</td></tr>
+        </div>
+    </article>
     {% endfor %}
-</table>
+
+    {% for article in demo_news %}
+    <article class="news-card">
+        <img src="{{ article.image_url }}" alt="{{ article.title }}">
+        <div class="news-card-body">
+            <h2>{{ article.title }}</h2>
+            <p class="news-excerpt">{{ article.summary }}</p>
+            <a class="button primary" href="/news/demo/{{ article.demo_id }}/">Читать далее</a>
+        </div>
+    </article>
+    {% endfor %}
+</div>
 {% endblock %}

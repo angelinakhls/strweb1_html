@@ -6,6 +6,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('about/', views.about, name='about'),
     path('news/', views.news_list, name='news'),
+    re_path(r'^news/demo/(?P<n>\d+)/$', views.news_demo, name='news_demo'),
     re_path(r'^news/(?P<pk>\d+)/$', views.news_detail, name='news_detail'),
     path('news/create/', views.article_create, name='article_create'),
     re_path(r'^news/(?P<pk>\d+)/edit/$', views.article_edit, name='article_edit'),

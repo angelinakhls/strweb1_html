@@ -13,52 +13,53 @@
     <title>{% block title %}Мебельная фабрика{% endblock %}</title>
 </head>
 <body itemscope itemtype="https://schema.org/Organization">
+    <header class="site-header">
+        <div class="brand-block">
+            <a href="/" class="brand" aria-label="Главная страница">
+                <span class="brand-mark">M</span>
+                <span>
+                    <strong class="company-name">Мебельная</strong><br>
+                    <small>фабрика</small>
+                </span>
+            </a>
+        </div>
+
+        <nav class="site-nav" aria-label="Основное меню">
+            <ul class="nav-list">
+                <li><a href="/">Главная</a></li>
+                <li><a href="/about/">О компании</a></li>
+                <li><a href="/news/">Новости</a></li>
+                <li><a href="/furniture/">Каталог</a></li>
+                <li><a href="/glossary/">FAQ</a></li>
+                <li><a href="/contacts/">Контакты</a></li>
+            </ul>
+        </nav>
+
+        <aside class="topbar-user" aria-label="Профиль пользователя">
+            {% if user.is_authenticated %}
+                <div class="user-box">
+                    <span class="user-name">{{ user.username }}</span>
+                    {% if user.is_staff %}
+                        <a href="/admin/">Админ-панель</a>
+                    {% else %}
+                        <span>Пользователь</span>
+                    {% endif %}
+                    <form method="post" action="/logout/">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-btn">Выйти</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="guest-box">
+                    <span>Гость</span>
+                    <a href="/login/">Войти</a>
+                    <a href="/register/">Регистрация</a>
+                </div>
+            {% endif %}
+        </aside>
+    </header>
+
     <div class="page-shell">
-        <header class="site-header">
-            <div class="brand-block">
-                <a href="/" class="brand" aria-label="Главная страница">
-                    <span class="brand-mark">M</span>
-                    <span>
-                        <strong>Мебельная</strong><br>
-                        <small>фабрика</small>
-                    </span>
-                </a>
-            </div>
-
-            <nav class="site-nav" aria-label="Основное меню">
-                <ul class="nav-list">
-                    <li><a href="/">Главная</a></li>
-                    <li><a href="/news/">Новости</a></li>
-                    <li><a href="/furniture/">Каталог</a></li>
-                    <li><a href="/glossary/">FAQ</a></li>
-                    <li><a href="/contacts/">Контакты</a></li>
-                </ul>
-            </nav>
-
-            <aside class="topbar-user" aria-label="Профиль пользователя">
-                {% if user.is_authenticated %}
-                    <div class="user-box">
-                        <span class="user-name">{{ user.username }}</span>
-                        {% if user.is_staff %}
-                            <a href="/admin/">Админ-панель</a>
-                        {% else %}
-                            <span>Пользователь</span>
-                        {% endif %}
-                        <form method="post" action="/logout/">
-                            {% csrf_token %}
-                            <button type="submit" class="logout-btn">Выйти</button>
-                        </form>
-                    </div>
-                {% else %}
-                    <div class="guest-box">
-                        <span>Гость</span>
-                        <a href="/login/">Войти</a>
-                        <a href="/register/">Регистрация</a>
-                    </div>
-                {% endif %}
-            </aside>
-        </header>
-
         <div class="layout">
             <aside class="sidebar" aria-label="Боковое меню">
                 <div class="sidebar-card">
@@ -72,10 +73,18 @@
 
                 <div class="sidebar-links">
                     <a href="/">Главная</a>
+                    <a href="/about/">О компании</a>
                     <a href="/news/">Новости</a>
                     <a href="/furniture/">Каталог изделий</a>
                     <a href="/glossary/">Словарь терминов</a>
                     <a href="/contacts/">Контакты</a>
+                    <a href="/vacancies/">Вакансии</a>
+                    <a href="/reviews/">Отзывы</a>
+                    <a href="/promos/">Промокоды</a>
+                    <a href="/privacy/">Политика</a>
+                    <a href="{% static 'downloads/company-profile.txt' %}" download>Профиль компании</a>
+                    <a href="mailto:info@mebelfabrika.by">Написать нам</a>
+                    <a href="https://css-tricks.com/snippets/" rel="noopener">Вдохновение CSS</a>
 
                     {% if user.is_authenticated %}
                         {% if nav.show_wholesale %}<a href="/wholesale/">Оптовые закупки</a>{% endif %}
@@ -97,6 +106,14 @@
                 {% block content %}{% endblock %}
             </main>
         </div>
+
+        <footer class="site-footer">
+            <div class="preloader" aria-hidden="true">
+                <div class="lego-brick"></div>
+                <p class="preloader-caption">Прелоадер «Лего» — фигура вращается вправо и влево</p>
+            </div>
+            <p>© Мебельная фабрика</p>
+        </footer>
     </div>
 </body>
 </html>

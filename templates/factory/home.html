@@ -4,7 +4,22 @@
 {% block title %}Главная{% endblock %}
 
 {% block content %}
-<main class="page-content">
+<div class="page-content">
+    <section class="workshop-stage" aria-label="Анимация сборки мебели">
+        <div class="workshop-parts">
+            <span class="part board b1"></span>
+            <span class="part board b2"></span>
+            <span class="part screw"></span>
+            <span class="part hammer"></span>
+        </div>
+        <div class="workshop-furniture">
+            <span class="furn table"></span>
+            <span class="furn chair"></span>
+            <span class="furn cabinet"></span>
+        </div>
+        <p class="workshop-title company-name">Мебельная фабрика</p>
+    </section>
+
     <section class="hero banner-card" aria-labelledby="hero-heading">
         <div class="hero-copy">
             <p class="eyebrow">Собственное производство</p>
@@ -12,6 +27,11 @@
             <p>
                 Мы создаём комфортные решения для дома, офиса и коммерческих помещений:
                 удобные шкафы, современные столы, мягкие диваны и функциональные системы хранения.
+            </p>
+            <p>
+                Цитата на русском: <q lang="ru">Дом начинается с хорошего стола</q>,
+                на английском: <q lang="en">Crafted to last</q>,
+                на французском: <q lang="fr">Le bois vit longtemps</q>.
             </p>
             <div class="cta-row">
                 <a class="button primary" href="/furniture/">Каталог</a>
@@ -23,6 +43,16 @@
             <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80" alt="Современный интерьер с мебелью фабрики">
             <figcaption>Мебель, которая объединяет стиль и удобство.</figcaption>
         </figure>
+    </section>
+
+    <section class="section-card">
+        <h2>Компании-партнёры</h2>
+        <ul class="partners">
+            <li class="partner-disk">WoodLine</li>
+            <li class="partner-disk">NordTex</li>
+            <li class="partner-disk">Mill &amp; Co</li>
+            <li class="partner-disk">Domus</li>
+        </ul>
     </section>
 
     <section class="stats-grid" aria-label="Наши преимущества">
@@ -47,7 +77,7 @@
     <section class="content-grid" aria-label="Основные особенности">
         <article class="info-card">
             <h2>Почему выбирают нас</h2>
-            <ul>
+            <ul class="unicode-list">
                 <li>Собственное производство и контроль качества</li>
                 <li>Индивидуальный подход к проектам</li>
                 <li>Гарантия на материалы и сборку</li>
@@ -56,7 +86,7 @@
 
         <article class="info-card">
             <h2>Наши материалы</h2>
-            <ol>
+            <ol class="ordered-list">
                 <li>ЛДСП и массив дерева</li>
                 <li>Экологичные покрытия</li>
                 <li>Металл и стекло в корпусных изделиях</li>
@@ -66,13 +96,14 @@
 
     <section class="section-card" id="features">
         <h2>Семантическое выделение текста</h2>
-        <p>
+        <p class="prose-sample">
             В HTML мы можем выделять <mark>важные фрагменты</mark>, использовать
             <abbr title="HyperText Markup Language">HTML</abbr>,
             <dfn>семантическую разметку</dfn> и подробные подсказки к терминам.
             Текст может быть <strong>усиленным</strong>, <em>акцентированным</em>
-            и <small>мелким по масштабу</small>.
+            и <span class="small-caps">оформленным капителью</span>.
         </p>
+        <p class="excerpt-context">Красная строка, интервалы и переносы настроены для этого абзаца.</p>
 
         <blockquote cite="https://developer.mozilla.org/ru/docs/Learn/HTML/Introduction_to_HTML/Document_and_website_structure">
             «Семантическая разметка помогает браузерам, поисковым системам и людям лучше понимать структуру страницы.»
@@ -85,7 +116,6 @@
 Найденный в каждом предмете.
 Мы делаем мебель не для мгновенья,
 А для жизни, в которой есть тепло и комфорт.</code></pre>
-        <p><small>Пример фиксированной строки с переводом строки через <code>&lt;br&gt;</code> или <code>&lt;pre&gt;</code>.</small></p>
     </section>
 
     <section class="two-column">
@@ -94,9 +124,8 @@
             <ul class="check-list">
                 <li>Ссылки и якоря</li>
                 <li>Контейнеры и секции</li>
-                <li>Таблицы �� формы</li>
+                <li>Таблицы и формы</li>
             </ul>
-
             <ol class="ordered-list">
                 <li>Подключить стили</li>
                 <li>Построить структуру</li>
@@ -109,10 +138,8 @@
             <dl>
                 <dt>HTML</dt>
                 <dd>Язык разметки гипертекстовых документов.</dd>
-
                 <dt>CSS</dt>
                 <dd>Язык описания внешнего вида документов.</dd>
-
                 <dt>SEO</dt>
                 <dd>Поисковая оптимизация для улучшения индексации.</dd>
             </dl>
@@ -122,7 +149,13 @@
     <section class="section-card">
         <h2>Таблица с заголовочными ячейками</h2>
         <table>
-            <caption>Показатели фабрики</caption>
+            <caption>Показатели фабрики над таблицей</caption>
+            <colgroup>
+                <col>
+                <col>
+                <col>
+                <col>
+            </colgroup>
             <thead>
                 <tr>
                     <th rowspan="2">Показатель</th>
@@ -145,7 +178,13 @@
                     <td>Склад</td>
                     <td>15</td>
                     <td>28</td>
-                    <td>Новый ассортимент</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Брак</td>
+                    <td>2%</td>
+                    <td>0,8%</td>
+                    <td>Контроль ОТК</td>
                 </tr>
             </tbody>
             <tfoot>
@@ -166,22 +205,18 @@
                         Имя
                         <input type="text" name="name" placeholder="Введите имя" required>
                     </label>
-
                     <label>
                         Email
                         <input type="email" name="email" placeholder="name@example.com" required>
                     </label>
-
                     <label>
                         Телефон
                         <input type="tel" name="phone" placeholder="+375 29 123 45 67">
                     </label>
-
                     <label>
                         Дата встречи
                         <input type="date" name="date">
                     </label>
-
                     <label>
                         Тип проекта
                         <select name="project-type">
@@ -191,28 +226,39 @@
                             <option value="custom">Индивидуальный заказ</option>
                         </select>
                     </label>
-
                     <label>
                         Бюджет
-                        <input type="number" name="budget" min="500" step="100" value="1500">
+                        <input type="number" name="budget" min="500" max="50000" step="100" value="1500">
                     </label>
-
+                    <label>
+                        Тестовое поле вне диапазона
+                        <input type="number" name="demo-range" min="1" max="5" value="9">
+                    </label>
+                    <label>
+                        Заблокировано
+                        <input type="text" name="locked" value="Только просмотр" disabled>
+                    </label>
                     <label class="full-width">
                         Комментарий
                         <textarea name="comment" rows="4" placeholder="Опишите задачу..."></textarea>
                     </label>
-
                     <label class="checkbox-line">
                         <input type="checkbox" name="agree" checked>
                         Согласен на обработку данных
                     </label>
-
+                    <label class="checkbox-line">
+                        <input type="radio" name="channel" value="phone" checked>
+                        Перезвонить
+                    </label>
+                    <label class="checkbox-line">
+                        <input type="radio" name="channel" value="email">
+                        Написать на почту
+                    </label>
                     <div class="range-wrap full-width">
                         <label for="priority">Приоритет</label>
                         <input id="priority" type="range" min="1" max="10" value="7">
                     </div>
                 </div>
-
                 <div class="form-actions">
                     <button type="submit" class="button primary">Отправить</button>
                     <button type="reset" class="button secondary">Сброс</button>
@@ -221,44 +267,26 @@
         </form>
     </section>
 
-    <section class="section-card media-layout">
+    <section class="section-card media-layout media-styled">
         <div>
             <h2>Изображения</h2>
             <figure class="gallery-figure">
                 <img src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=900&q=80" alt="Современная гостиная с мягкой мебелью" class="responsive-image">
                 <figcaption>Фотография комнаты с мебелью фабрики.</figcaption>
             </figure>
-            <p><a href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" download>Скачать пример документа</a></p>
+            <p><a href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf">Скачать пример PDF</a></p>
         </div>
-
         <div>
             <h2>Видео и аудио</h2>
             <video controls preload="metadata" poster="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80">
                 <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
                 Ваш браузер не поддерживает видео.
             </video>
-
             <audio controls>
                 <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
                 Ваш браузер не поддерживает аудио.
             </audio>
         </div>
-    </section>
-
-    <section class="section-card">
-        <h2>Навигация и якоря</h2>
-        <nav aria-label="Навигация внутри страницы">
-            <ul class="inline-nav">
-                <li><a href="#features">Преимущества</a></li>
-                <li><a href="#poem">Четверостишие</a></li>
-                <li><a href="#forms-demo">Форма</a></li>
-            </ul>
-        </nav>
-    </section>
-
-    <section class="section-card">
-        <h2>iframe</h2>
-        <iframe title="Пример карты" src="https://www.google.com/maps?q=Minsk&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </section>
 
     {% if article %}
@@ -270,8 +298,13 @@
         <a href="/news/{{ article.pk }}/" class="button primary">Читать далее</a>
     </article>
     {% else %}
-    <p class="empty-state">Новостей пока нет.</p>
+    <article class="news-spotlight section-card">
+        <h2>Последняя новость</h2>
+        <p class="meta">11/06/2026</p>
+        <h3>Как ухаживать за мебелью из массива зимой</h3>
+        <p>Сухой воздух отопления сушит древесину — влажность в комнате лучше держать около 40–60%.</p>
+        <a href="/news/demo/7/" class="button primary">Читать далее</a>
+    </article>
     {% endif %}
-</main>
+</div>
 {% endblock %}
-

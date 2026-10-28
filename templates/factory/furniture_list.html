@@ -2,8 +2,8 @@
 {% block title %}Изделия{% endblock %}
 {% block content %}
 <h1>Каталог изделий</h1>
-<form method="get" style="margin-bottom:15px;">
-    <input type="text" name="q" value="{{ q }}" placeholder="Поиск...">
+<form method="get" class="catalog-toolbar">
+    <input type="search" name="q" value="{{ q }}" placeholder="Поиск...">
     <select name="type">
         <option value="">Все виды</option>
         {% for t in types %}
@@ -19,48 +19,34 @@
     <button type="submit" class="btn">Найти</button>
     {% if can_manage %}<a href="/furniture/create/" class="btn">+ Добавить</a>{% endif %}
 </form>
-<table id="furniture-table">
-    <tr>
-        <th>Артикул</th>
-        <th><button type="button" onclick="sortFurniture(1)">Название ↕</button></th>
-        <th>Вид</th>
-        <th><button type="button" onclick="sortFurniture(3)">Цена ↕</button></th>
-        <th>Статус</th>
-        <th>Действия</th>
-    </tr>
+
+<div class="catalog-grid">
     {% for item in items %}
-    <tr>
-        <td>{{ item.code }}</td>
-        <td><a href="/furniture/{{ item.pk }}/">{{ item.name }}</a></td>
-        <td>{{ item.furniture_type }}</td>
-        <td data-sort="{{ item.price }}">{{ item.price }} BYN</td>
-        <td>{% if item.is_active %}В производстве{% else %}Снято{% endif %}</td>
-        <td>
+    <article class="catalog-card">
+        {% if item.photo %}
+        <img src="{{ item.photo.url }}" alt="{{ item.name }}">
+        {% else %}
+        <div class="catalog-photo-fallback"></div>
+        {% endif %}
+        <div class="card-body">
+            <h2>{{ item.name }}</h2>
+            <p>{{ item.furniture_type }} · {{ item.code }}</p>
+            <p><strong>{{ item.price }} BYN</strong></p>
+            <p>{% if item.is_active %}В производстве{% else %}Снято{% endif %}</p>
+            <p><a class="button primary" href="/furniture/{{ item.pk }}/">Подробнее</a></p>
             {% if can_manage %}
-            <a href="/furniture/{{ item.pk }}/edit/">Изменить</a>
-            <a href="/furniture/{{ item.pk }}/delete/">Удалить</a>
+            <p>
+                <a href="/furniture/{{ item.pk }}/edit/">Изменить</a>
+                <a href="/furniture/{{ item.pk }}/delete/">Удалить</a>
+            </p>
             {% endif %}
             {% if nav.show_cart %}
-            <a href="/cart/add/{{ item.pk }}/">В корзину</a>
+            <p><a href="/cart/add/{{ item.pk }}/">В корзину</a></p>
             {% endif %}
-        </td>
-    </tr>
-    {% empty %}<tr><td colspan="6">Ничего не найдено</td></tr>
+        </div>
+    </article>
+    {% empty %}
+    <p class="empty-state">Ничего не найдено</p>
     {% endfor %}
-</table>
-<script>
-function sortFurniture(col) {
-    const table = document.getElementById('furniture-table');
-    const rows = Array.from(table.querySelectorAll('tr')).slice(1);
-    const asc = table.dataset.asc !== String(col);
-    table.dataset.asc = asc ? String(col) : '';
-    rows.sort((a,b) => {
-        let av = a.cells[col].dataset.sort || a.cells[col].innerText;
-        let bv = b.cells[col].dataset.sort || b.cells[col].innerText;
-        if (col === 3) { av = parseFloat(av); bv = parseFloat(bv); return asc ? av-bv : bv-av; }
-        return asc ? av.localeCompare(bv,'ru') : bv.localeCompare(av,'ru');
-    });
-    rows.forEach(r => table.appendChild(r));
-}
-</script>
+</div>
 {% endblock %}

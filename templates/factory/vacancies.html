@@ -3,17 +3,27 @@
 {% block title %}Вакансии{% endblock %}
 {% block content %}
 <h1>Вакансии</h1>
-<table>
-    <tr><th>Должность</th><th>Описание</th><th>Добавлено (локально)</th><th>Добавлено (UTC)</th></tr>
+<div class="vacancies-wrap">
     {% for vacancy in vacancies %}
-    <tr>
-        <td>{{ vacancy.title }}</td>
-        <td>{{ vacancy.description }}</td>
-        <td>{{ vacancy.created_at_local|default:vacancy.created_at_utc|date:"d/m/Y H:i:s" }}</td>
-        <td>{% timezone "UTC" %}{{ vacancy.created_at_utc|date:"d/m/Y H:i:s" }}{% endtimezone %}</td>
-    </tr>
+    <article class="vacancy-card">
+        <h2>{{ vacancy.title }}</h2>
+        <p>{{ vacancy.description }}</p>
+        <p><small>Добавлено (локально): {{ vacancy.created_at_local|default:vacancy.created_at_utc|date:"d/m/Y H:i:s" }}</small></p>
+        <p><small>Добавлено (UTC): {% timezone "UTC" %}{{ vacancy.created_at_utc|date:"d/m/Y H:i:s" }}{% endtimezone %}</small></p>
+    </article>
     {% empty %}
-    <tr><td colspan="4">Открытых вакансий нет</td></tr>
+    <article class="vacancy-card">
+        <h2>Сборщик корпусной мебели</h2>
+        <p>Сборка шкафов и кухонь на производстве. Опыт приветствуется, обучение на месте.</p>
+    </article>
+    <article class="vacancy-card">
+        <h2>Дизайнер интерьеров</h2>
+        <p>Проектирование кухонь и гардеробных, общение с клиентами, подготовка чертежей.</p>
+    </article>
+    <article class="vacancy-card">
+        <h2>Менеджер отдела продаж</h2>
+        <p>Приём заявок с сайта, расчёт стоимости, ведение сделки до отгрузки.</p>
+    </article>
     {% endfor %}
-</table>
+</div>
 {% endblock %}

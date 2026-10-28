@@ -99,16 +99,25 @@ class ArticleForm(forms.ModelForm):
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ['rating', 'text', 'image']
+        fields = ['furniture', 'rating', 'text', 'image']
         widgets = {
-            'rating': forms.Select(choices=[(i, f'{i}★') for i in range(1, 6)]),
-            'text': forms.Textarea(attrs={'placeholder': 'Напишите ваш отзыв...'}),
+            'furniture': forms.Select(attrs={'required': True}),
+            'rating': forms.NumberInput(attrs={
+                'type': 'number', 'min': 1, 'max': 5, 'required': True, 'value': 5,
+            }),
+            'text': forms.Textarea(attrs={
+                'placeholder': 'Напишите ваш отзыв...',
+                'rows': 4,
+            }),
+            'image': forms.ClearableFileInput(attrs={'accept': 'image/*'}),
         }
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['text'].required = False
         self.fields['image'].required = False
+        self.fields['furniture'].required = True
+        self.fields['rating'].required = True
 
 
 class FAQQuestionForm(forms.ModelForm):

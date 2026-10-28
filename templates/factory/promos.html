@@ -1,20 +1,26 @@
-    {% extends 'factory/base.html' %}
-    {% block title %}Промокоды{% endblock %}
-    {% block content %}
-    <h1>Промокоды и купоны</h1>
-    <h2>Активные</h2>
+{% extends 'factory/base.html' %}
+{% block title %}Промокоды{% endblock %}
+{% block content %}
+<h1>Промокоды и купоны</h1>
+<h2>Активные</h2>
+<ul class="promo-list promo-list--active">
     {% for p in active %}
-    <div style="border:2px solid green; padding:10px; margin:5px 0;">
+    <li>
         <b>{{ p.code }}</b> — скидка {{ p.discount_percent }}%
         {% if p.valid_until %}(до {{ p.valid_until|date:"d/m/Y" }}){% endif %}
-    </div>
-    {% empty %}<p>Нет активных промокодов.</p>
+    </li>
+    {% empty %}
+    <li>SPRING26 — скидка 10% (пример)</li>
+    <li>Нет других активных промокодов из базы.</li>
     {% endfor %}
-    <h2>Архив</h2>
+</ul>
+
+<h2>Архив</h2>
+<ul class="promo-list promo-list--archive">
     {% for p in archive %}
-    <div style="border:1px solid #ccc; padding:10px; margin:5px 0; color:#999;">
-        <b>{{ p.code }}</b> — {{ p.discount_percent }}%
-    </div>
-    {% empty %}<p>Архив пуст.</p>
+    <li><b>{{ p.code }}</b> — {{ p.discount_percent }}%</li>
+    {% empty %}
+    <li>WINTER25 — 15% (истёк)</li>
     {% endfor %}
-    {% endblock %}
+</ul>
+{% endblock %}

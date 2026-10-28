@@ -1,27 +1,46 @@
 {% extends 'factory/base.html' %}
 {% block title %}Контакты{% endblock %}
 {% block content %}
-
 <h1>Контакты</h1>
+<p>Фото сотрудников, описание работ, телефон и почта — карточки собраны на Flexbox.</p>
 
-{% for emp in employees %}
-<div style="border:1px solid #ddd; padding:15px; margin:10px 0; border-radius:6px; overflow:hidden;">
-    {% if emp.photo %}
-    <img src="{{ emp.photo.url }}" style="max-width:120px; float:left; margin-right:15px;">
-    {% endif %}
-    <h2>{{ emp.full_name }}</h2>
-    <p><b>Должность:</b> {{ emp.position }}</p>
-    <p><b>Телефон:</b> {{ emp.phone }}</p>
-    {% if emp.email %}
-    <p><b>Email:</b> {{ emp.email }}</p>
-    {% endif %}
-    {% if emp.work_description %}
-    <p>{{ emp.work_description }}</p>
-    {% endif %}
-    <div style="clear:both;"></div>
+<div class="staff-grid">
+    {% for emp in employees %}
+    <article class="staff-card">
+        {% if emp.photo %}
+        <img src="{{ emp.photo.url }}" alt="{{ emp.full_name }}">
+        {% else %}
+        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=300&q=80" alt="{{ emp.full_name }}">
+        {% endif %}
+        <div>
+            <h2>{{ emp.full_name }}</h2>
+            <p><b>Должность:</b> {{ emp.position }}</p>
+            <p><b>Телефон:</b> {{ emp.phone }}</p>
+            {% if emp.email %}<p><b>Email:</b> {{ emp.email }}</p>{% endif %}
+            {% if emp.work_description %}<p>{{ emp.work_description }}</p>{% endif %}
+        </div>
+    </article>
+    {% empty %}
+    <article class="staff-card">
+        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=300&q=80" alt="Менеджер">
+        <div>
+            <h2>Иванова Анна</h2>
+            <p><b>Должность:</b> менеджер по работе с клиентами</p>
+            <p><b>Телефон:</b> +375 (29) 111-22-33</p>
+            <p><b>Email:</b> anna@mebelfabrika.by</p>
+            <p>Консультации, расчёт заказа и сопровождение доставки.</p>
+        </div>
+    </article>
+    <article class="staff-card">
+        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=300&q=80" alt="Мастер">
+        <div>
+            <h2>Петров Сергей</h2>
+            <p><b>Должность:</b> мастер цеха</p>
+            <p><b>Телефон:</b> +375 (29) 222-33-44</p>
+            <p><b>Email:</b> sergey@mebelfabrika.by</p>
+            <p>Контроль сборки корпусной мебели и приёмка ОТК.</p>
+        </div>
+    </article>
+    {% endfor %}
 </div>
-{% empty %}
-<p>Контакты не добавлены.</p>
-{% endfor %}
-
 {% endblock %}

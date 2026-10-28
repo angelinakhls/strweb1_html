@@ -1,13 +1,65 @@
 {% extends 'factory/base.html' %}
+{% load static %}
 {% block title %}О компании{% endblock %}
 {% block content %}
-<h1>О компании</h1>
-{% for item in info %}
-<div style="margin:15px 0;">
-    {% if item.year %}<h3>{{ item.year }}</h3>{% endif %}
-    <h2>{{ item.title }}</h2>
-    <p>{{ item.content }}</p>
+<div class="page-content">
+    <section class="section-card">
+        <span class="about-logo-mark" aria-hidden="true">M</span>
+        <h1 class="company-name">О компании</h1>
+        <p class="prose-sample">
+            Мебельная фабрика работает в Беларуси: проектируем, производим и доставляем корпусную и мягкую мебель.
+            Логотип выше поворачивается за счёт CSS-трансформации.
+        </p>
+    </section>
+
+    <div class="certificate">
+        <h2>Сертификат качества</h2>
+        <p>Настоящим подтверждается, что изделия фабрики соответствуют внутреннему регламенту контроля материалов, сборки и отделки.</p>
+        <p>Реестр № 28-MF / 2026</p>
+        <span class="seal">ОТК</span>
+    </div>
+
+    <section class="section-card">
+        <h2>История по годам</h2>
+        <ol class="history-list">
+            {% for item in info %}
+            <li>
+                {% if item.year %}<strong>{{ item.year }}</strong> — {% endif %}
+                <span>{{ item.title }}.</span>
+                {{ item.content }}
+            </li>
+            {% empty %}
+            <li><strong>2011</strong> — открыт первый цех корпусной мебели в Минске.</li>
+            <li><strong>2016</strong> — запущена линия мягкой мебели и собственная обивка.</li>
+            <li><strong>2021</strong> — появились модульные системы хранения под замер.</li>
+            <li><strong>2026</strong> — онлайн-каталог, доставка по Беларуси и гарантийный сервис.</li>
+            {% endfor %}
+        </ol>
+    </section>
+
+    <section class="section-card">
+        <h2>Реквизиты</h2>
+        <address class="requisites">
+            ООО «Мебельная фабрика»<br>
+            УНП 193000167, г. Минск, ул. Фабричная, 12<br>
+            р/с BY12 UNBS 3012 0000 0000 0000 0000 в ОАО «Банк»<br>
+            e-mail: info@mebelfabrika.by, тел. +375 (17) 200-00-00
+        </address>
+    </section>
+
+    <section class="section-card media-layout media-styled">
+        <div>
+            <h2>Видео производства</h2>
+            <video controls preload="metadata">
+                <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div>
+            <h2>Аудио-экскурсия</h2>
+            <audio controls>
+                <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+    </section>
 </div>
-{% empty %}<p>Информация не добавлена.</p>
-{% endfor %}
 {% endblock %}

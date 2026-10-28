@@ -1,9 +1,24 @@
 {% extends 'factory/base.html' %}
-{% block title %}{{ article.title }}{% endblock %}
+{% block title %}{% if demo %}{{ demo.title }}{% else %}{{ article.title }}{% endif %}{% endblock %}
 {% block content %}
-<h1>{{ article.title }}</h1>
-<small>{{ article.published_at|date:"d/m/Y" }}</small>
-{% if article.image %}<br><img src="{{ article.image.url }}" style="max-width:500px;">{% endif %}
-<p>{{ article.content }}</p>
-<a href="/news/" class="btn">← Назад</a>
+<article class="section-card">
+    {% if demo %}
+        <h1>{{ demo.title }}</h1>
+        <p class="small-caps">{{ demo.date_label }}</p>
+        <img class="responsive-image" src="{{ demo.image_url }}" alt="{{ demo.title }}">
+        <div class="article-columns">
+            <p>{{ demo.content }}</p>
+        </div>
+    {% else %}
+        <h1>{{ article.title }}</h1>
+        <p class="small-caps">{{ article.published_at|date:"d/m/Y" }}</p>
+        {% if article.image %}
+        <img class="responsive-image" src="{{ article.image.url }}" alt="{{ article.title }}">
+        {% endif %}
+        <div class="article-columns">
+            <p>{{ article.content }}</p>
+        </div>
+    {% endif %}
+    <p><a href="/news/" class="button secondary">← Назад</a></p>
+</article>
 {% endblock %}
