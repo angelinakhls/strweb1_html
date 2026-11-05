@@ -1174,16 +1174,16 @@ iframe {
     margin: 1.5rem auto;
     padding: 2.4rem 2rem;
     text-align: center;
-    color: #3f2e14;
+    color: #213f14;
     background-color: #f7ecd0;
     background-image:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(201, 162, 39, 0.18)),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(58, 39, 201, 0.18)),
         url("../images/certificate-border.svg");
     background-size: cover;
     z-index: 2;
-    border-width: 28px;
-    border-style: solid;
-    border-color: transparent;
+        border-width: 28px;
+        border-style: solid;
+        border-color: transparent;
     -webkit-border-image: url("../images/certificate-border.svg") 28 28 round;
     -moz-border-image: url("../images/certificate-border.svg") 28 28 round;
     -o-border-image: url("../images/certificate-border.svg") 28 28 round;
